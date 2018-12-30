@@ -1,12 +1,14 @@
 frege.sty - a LaTeX2e package for typesetting begriffsschrift
 
 This package is based on begriff.sty released under the GNU General Public License. 
-Copyright (C) 2003 by Josh Parsons <josh@coombs.anu.edu.au>
+Copyright (C) 2003 by Josh Parsons
+
+Since version 1.3 this package also makes use of the bguq package by J.J. Green.
 
 Changes with respect to begriff.sty
 
-correct relative lengths of the content stroke with respect to other strokes attached 
-to it;
+correct relative lengths of the content stroke with respect to other strokes 
+attached to it;
 content strokes point at the middle of the following symbols, rather than the bottom;
 greater width for the assertion stroke as compared to the content stroke;
 a more intuitive structure for the conditional (arguments are now given in the same 
@@ -59,6 +61,10 @@ will produce a stroke half as long. Warning: setting a length shorter than what 
 needed to fit all the options of a stroke leads to negative lengths and hence 
 unpredictable results.
 
+Since version 1.3 it is also possible to call all the above commands without the 
+word "content" for the content strokes and with just "q" instead of the word "quant" 
+for the quantifiers.
+
 frege.sty defines the following more complex commands:
 \Fconditional[<option>]{<consequent>}{<antecedent>}
 \Fbox{<begriffsschrift formula with at least one conditional>}
@@ -68,26 +74,29 @@ frege.sty defines the following more complex commands:
 
 The final two have been added in version 1.2.
 
+The following shorthands for the above commands have been introduced in version 1.3: 
+\Fcdt, \Fb, \Fbb, \Farg, \Fs;
+
 The "Fconditional" command requires a mixture of the commands defined by frege.sty 
 and normal mathmode input to produce begriffsschrift. A implies B would be written 
 like this: 
 
 \Fconditional[\Facontent]{\Fcontent B}{\Fcontent A}
 
-This produces the two dimensional fregean conditional symbol with B lined up above A. 
-In addition the "Fconditional" command may be arbitrarily nested to produce any 
-begriffsschrift formula possible. Only the unnested conditional requires the optional 
-argument.
+This produces the two dimensional fregean conditional symbol with B lined up above 
+A. In addition the "Fconditional" command may be arbitrarily nested to produce any 
+begriffsschrift formula possible. All begriffsschrift symbol can be made without 
+the use of the optional argument, it exists only for convenience.
 
 "Fbracket" is just the same as "\left(\Fbox\right)" everything said about "Fbox" 
 applies equally to "Fbracket". A completed formula of begriffsschrift that includes 
 at least one conditional, should always be placed in an "Fbox" this ensures it is 
-given enough space in the output behaves correctly with respect to the text around it 
-and works correctly within environments such as align*.
+given enough space in the output behaves correctly with respect to the text around 
+it and works correctly within environments such as align*.
 
-"Fargument" arranges two begriffsschrift formulas above each other and seperates them 
-from a third by a horizontal line. The option is for the name of a premise written 
-elsewhere and will outout (name): to the left of the horizontal line.
+"Fargument" arranges two begriffsschrift formulas above each other and seperates 
+them from a third by a horizontal line. The option is for the name of a premise 
+written elsewhere and will outout (name): to the left of the horizontal line.
 
 "Fstrut" is like a invisible content stroke. Like all other basic strokes, it may be 
 scaled using it's optional argument. Fstrut is to be used in conjunction with 
@@ -107,5 +116,16 @@ length:         default value:  description:
 \Fnegshort      2\Flinewidth    the space between negation stroke and baseline
 \Fquantwidth    6pt             width of the semi circular quantifier depression
 
-For more examples see accompanying manual (Frege.pdf or Frege.tex)
+Since version 1.3 it is possible to load this package using the "bguq" option: 
+\usepackage[bguq]{frege}
+
+if the bguq option is enabled all quantifiers will use the bguq character provided 
+by the bguq package by J.J. Green rather than the qbezier used by this package. 
+This means the bguq package must be installed to use the option. (It can be found 
+on ctan: http://www.ctan.org/pkg/bguq).
+Warning: as it stands the bguq character scales with font while the rest of the 
+symbols provided by this package do not. Also, the bguq character will not respond 
+to a change in Flinewidth.
+
+For more examples and info see accompanying manual (frege.pdf or frege.tex)
 Everything released under GNU General Public License.
