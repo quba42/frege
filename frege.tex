@@ -66,15 +66,28 @@
       centered when scaled;
   \squishlistend
 
+\subsection{Changes in Version 1.1}
+  \squishlist
+    \item added a optional scale factor to all basic strokes;
+    \item simplified the code for Fbracket in terms of that for Fbox;
+    \item rearranged the code in the style file in a more logical way;
+  \squishlistend
+
+\subsection{Changes in Version 1.2}
+  \squishlist
+    \item added a new command ``Fargument'' for typesetting arguments;
+    \item added a new command ``Fstrut'' to be used in conjunction with Fargument;
+    \item changed Fbaselength to be equal to the full length of a basi stroke (20pt);
+    \item fixed a bug where the scale factor introduced in version 1.1 does not reset 
+      after all uses;
+  \squishlistend
+
 \subsection{Changes and Features yet to come}
   \squishlist
     \item incorporation of other frege related material such as fge.sty so as to put 
       all frege related material in a single package;
-    \item a therefore stroke for typesetting arguments;
     \item a vertical shorthand stroke such as used by Frege for typesetting arguments 
       in ``Begriffsschrift'';
-    \item reducing the length of the content stroke between the depressions of two 
-      adjacent quantifiers;
   \squishlistend
 
 \section{Features and Usage}
@@ -83,45 +96,55 @@
   The following is a list of the basic commands provided by this package along with 
   accompanying output. The conditional is treated sepperately.
   \begin{flalign*}
-    &\mbox{\textbackslash Fcontent} & &\Fcontent & & &\\
-    &\mbox{\textbackslash Fncontent} & &\Fncontent\\
-    &\mbox{\textbackslash Fnncontent} & &\Fnncontent\\
-    &\mbox{\textbackslash Facontent} & &\Facontent\\
-    &\mbox{\textbackslash Fancontent} & &\Fancontent\\
-    &\mbox{\textbackslash Fanncontent} & &\Fanncontent\\
-    &\mbox{\textbackslash Fquant\{a\}} & &\Fquant{a}\\
-    &\mbox{\textbackslash Fnquant\{a\}} & &\Fnquant{a}\\
-    &\mbox{\textbackslash Fnnquant\{a\}} & &\Fnnquant{a}\\
-    &\mbox{\textbackslash Fquantn\{a\}} & &\Fquantn{a}\\
-    &\mbox{\textbackslash Fquantnn\{a\}} & &\Fquantnn{a}\\
-    &\mbox{\textbackslash Fnquantn\{a\}} & &\Fnquantn{a}\\
-    &\mbox{\textbackslash Fnquantnn\{a\}} & &\Fnquantnn{a}\\
-    &\mbox{\textbackslash Fnnquantn\{a\}} & &\Fnnquantn{a}\\
-    &\mbox{\textbackslash Fnnquantnn\{a\}} & &\Fnnquantnn{a}\\
-    &\mbox{\textbackslash Faquant\{a\}} & &\Faquant{a}\\
-    &\mbox{\textbackslash Fanquant\{a\}} & &\Fanquant{a}\\
-    &\mbox{\textbackslash Fannquant\{a\}} & &\Fannquant{a}\\
-    &\mbox{\textbackslash Faquantn\{a\}} & &\Faquantn{a}\\
-    &\mbox{\textbackslash Faquantnn\{a\}} & &\Faquantnn{a}\\
-    &\mbox{\textbackslash Fanquantn\{a\}} & &\Fanquantn{a}\\
-    &\mbox{\textbackslash Fanquantnn\{a\}} & &\Fanquantnn{a}\\
-    &\mbox{\textbackslash Fannquantn\{a\}} & &\Fannquantn{a}\\
-    &\mbox{\textbackslash Fannquantnn\{a\}} & &\Fannquantnn{a}\\
+    &\mbox{\textbackslash Fcontent[1]} & &\Fcontent & & &\\
+    &\mbox{\textbackslash Fncontent[1]} & &\Fncontent\\
+    &\mbox{\textbackslash Fnncontent[1]} & &\Fnncontent\\
+    &\mbox{\textbackslash Facontent[1]} & &\Facontent\\
+    &\mbox{\textbackslash Fancontent[1]} & &\Fancontent\\
+    &\mbox{\textbackslash Fanncontent[1]} & &\Fanncontent\\
+    &\mbox{\textbackslash Fquant[1]\{a\}} & &\Fquant{a}\\
+    &\mbox{\textbackslash Fnquant[1]\{a\}} & &\Fnquant{a}\\
+    &\mbox{\textbackslash Fnnquant[1]\{a\}} & &\Fnnquant{a}\\
+    &\mbox{\textbackslash Fquantn[1]\{a\}} & &\Fquantn{a}\\
+    &\mbox{\textbackslash Fquantnn[1]\{a\}} & &\Fquantnn{a}\\
+    &\mbox{\textbackslash Fnquantn[1]\{a\}} & &\Fnquantn{a}\\
+    &\mbox{\textbackslash Fnquantnn[1]\{a\}} & &\Fnquantnn{a}\\
+    &\mbox{\textbackslash Fnnquantn[1]\{a\}} & &\Fnnquantn{a}\\
+    &\mbox{\textbackslash Fnnquantnn[1]\{a\}} & &\Fnnquantnn{a}\\
+    &\mbox{\textbackslash Faquant[1]\{a\}} & &\Faquant{a}\\
+    &\mbox{\textbackslash Fanquant[1]\{a\}} & &\Fanquant{a}\\
+    &\mbox{\textbackslash Fannquant[1]\{a\}} & &\Fannquant{a}\\
+    &\mbox{\textbackslash Faquantn[1]\{a\}} & &\Faquantn{a}\\
+    &\mbox{\textbackslash Faquantnn[1]\{a\}} & &\Faquantnn{a}\\
+    &\mbox{\textbackslash Fanquantn[1]\{a\}} & &\Fanquantn{a}\\
+    &\mbox{\textbackslash Fanquantnn[1]\{a\}} & &\Fanquantnn{a}\\
+    &\mbox{\textbackslash Fannquantn[1]\{a\}} & &\Fannquantn{a}\\
+    &\mbox{\textbackslash Fannquantnn[1]\{a\}} & &\Fannquantnn{a}\\
   \end{flalign*}
   This may seem like a daunting list, but there is an exceedingly simple way to think 
-  about it. In a sense there are only two commands \textbackslash Fcontent and 
-  \textbackslash Fquant\{\}. These two commands can be augmented with a combination 
-  of as and ns so as to add assertion and negation strokes respectively. Any stroke 
-  that is asserted (has a fat vertical line at the start) starts with `\textbackslash 
-  Fa'. this may be followed by either one or two `n' to add one or two negation 
-  strokes (the small vertical lines below the assertion stroke). Next comes the name 
-  of the main command, either `quant' or `content'. Finally the quantifiers may be 
-  followed by either one or two `n' to add one or two negation strokes to the 
-  content stroke after the quantifier's depression.
+  about it. In a sense there are only two commands \textbackslash Fcontent[1] and 
+  \textbackslash Fquant[1]\{\}. These two commands can be augmented with a 
+  combination of as and ns so as to add assertion and negation strokes respectively. 
+  Any stroke that is asserted (has a fat vertical line at the start) starts with 
+  `\textbackslash Fa'. This may be followed by either one or two or no `n' to add one 
+  or two or no negation strokes (the small vertical lines below the assertion 
+  stroke). Next comes the name of the main command, either `quant' or `content'. 
+  Finally the quantifiers may be followed by either one or two `n' to add one or two 
+  negation strokes to the content stroke after the quantifier's depression.
 
   Consider also that many of these commands are only really present for completeness 
   sake. It is difficult to imagine a situation where a twice negated quantifier with 
   twice negated content would ever be needed.
+
+  Since version 1.1 all basic strokes also have an optional scaling factor. A command 
+  followed by [.5], for example would produce a stroke exactly half the default 
+  length while [2] produces a stroke twice the default length. (The default length 
+  is given by \textbackslash Fbaselength which is set to 20pt. Scaling allows for 
+  greater control in the total length of formula as well as for a shorter syntax. 
+  (We can replace expressions like \textbackslash Facontent \textbackslash Fcontent 
+  with \textbackslash Facontent[2].) Care must be taken not to set a length that is 
+  shorter than what is needed to fit all the parts of some basic stroke. This will 
+  lead to negative lengths and hence unpredictable output.
 
   All quantifiers also have a mandatory argument that specifies the variable 
   associated with the quantifier. (Mandatory arguments are contained in a set of 
@@ -133,10 +156,10 @@
   math mode usually results in better formatting.)
 
   Finally one may combine the above commands in arbitrary combinations which will 
-  result in gapless longer strokes. (Eg.: $\Faquant{a}\Fnquantn{b}A$) which may be 
-  roughly translated into english as ``for all $\mathfrak{a}$ there exists a 
-  $\mathfrak{b}$ such that $A$''. (The commands I used for this expression are 
-  \$\textbackslash Faquant\{a\}\textbackslash Fnquantn\{b\}A\$).
+  result in gapless longer strokes. (Eg.: $\Faquant[0.6]{a}\Fnquantn[1.4]{b}A$) 
+  which may be roughly translated into english as ``for all $\mathfrak{a}$ there 
+  exists a $\mathfrak{b}$ such that $A$''. (The commands I used for this expression 
+  are \$\textbackslash Faquant\{a\}\textbackslash Fnquantn\{b\}A\$).
 
 \subsubsection{Conditional}
   The conditional is the most important command in this package since it gives 
@@ -153,9 +176,9 @@
   \$\textbackslash Fconditional[\textbackslash Fancontent]\{\textbackslash Fncontent 
   A\}\{\textbackslash Fcontent B\}\$ \\
   and produce the following output: 
-
-  $\Fconditional[\Fancontent]{\Fncontent A}{\Fcontent B}$
-
+  \begin{align*}
+    \Fbox{\Fconditional[\Fancontent]{\Fncontent A}{\Fcontent B}}
+  \end{align*}
   In addition Fconditional may be nested as it's own argument to arbitrary depth. 
   Nesting in the option is not recommended. \\
   A conditional with nested consequent may be given as follows:
@@ -164,19 +187,20 @@
   Fcontent\textbackslash Fconditional\{\textbackslash Fcontent A\}\{\textbackslash 
   Fcontent B\}\}\{\textbackslash Fcontent\textbackslash Fcontent C\}\$\\
   and produces the following output:
-
-  $\Fconditional[\Facontent]{\Fcontent\Fconditional{\Fcontent A}%
-  {\Fcontent B}}{\Fcontent\Fcontent C}$\\
+  \begin{align*}
+    \Fbox{\Fconditional[\Facontent]{\Fcontent\Fconditional{\Fcontent A}
+    {\Fcontent B}}{\Fcontent[2] C}}
+  \end{align*}
   A conditional with nested antecedent may be given as follows:
 
   \$\textbackslash Fconditional[\textbackslash Facontent]\{\textbackslash Fcontent 
   \textbackslash Fcontent A\}\{\textbackslash Fcontent\textbackslash Fconditional 
   \{\textbackslash Fcontent B\}\{\textbackslash Fcontent C\}\}\$\\
   and produces the following output:
-
-  $\Fconditional[\Facontent]{\Fcontent\Fcontent A}{\Fcontent\Fconditional%
-  {\Fcontent B}{\Fcontent C}}$
-
+  \begin{align*}
+    \Fbox{\Fconditional[\Facontent]{\Fcontent[2] A}{\Fcontent\Fconditional%
+    {\Fcontent B}{\Fcontent C}}}
+  \end{align*}
   Each section of a content stroke may thus be replaced with any of the strokes given 
   by the list of basic commands. Note that it is up to the user to place the 
   appropriate number of strokes in each argument to ensure that the content strokes 
@@ -207,6 +231,35 @@
   the align* environment for example) unless it is placed in an Fbox. In short, 
   always use an Fbox (or Fbracket).
 
+\subsection{Arguments and Struts}
+  Since version 1.2 two arguments have been added that allow for the typesetting of 
+  arguments. The syntax for the argument command is as follows:
+
+  \textbackslash Fargument[\textless absent premise\textgreater]\{\textless premise 
+  1\textgreater\}\{\textless premise 2\textgreater\}\{\textless conclusion
+  \textgreater\}\\
+  In the following esample the optional argument for the absent premise takes the 
+  value `$X$' the premises are the two formulas above the therfore line and the 
+  conclusion is the formula below the therefore line. The Begriffschrift expressions 
+  in the arguments of the Fargument command do not need to be placed in an Fbox, 
+  since the Fargument command works by boxing it's arguments allready.
+  \begin{align*}
+    \Fargument[X]
+      {\Fconditional[\Facontent]
+        {\Fcontent[2] A}
+        {\Fcontent\Fconditional{\Fcontent B}{\Fcontent C}}}
+      {\Fstrut[2]\Facontent C}
+      {\Fstrut[2]\Facontent A}
+  \end{align*}
+  where $X=\Facontent B$; (this is typeset seperately from the Fargument command);
+
+  The three begriffsschrift formulas above are in fact aligned leftbound. To make 
+  them appear rightbound no matter what the relative lengths of $A$, $B$, and $C$, 
+  the command ``Fstrut'' has been used in front of $\Facontent C$ and $\Facontent A$. 
+  The command \textbackslash Fstrut[1] works exactly like an invisible content 
+  stroke, that is it inserts space of length Fbaselength. Like all basic strokes it 
+  can be scaled via an optional scale factor.
+
 \subsection{Lengths}
   In theory all the dimensions in this package can be changed with the command 
   \textbackslash setlength\{\textless name of length\textgreater\}\{\textless new 
@@ -216,7 +269,7 @@
     \hline
     name & default value & description \\
     \hline
-    \textbackslash Fbaselength & 10pt & half the length of a basic stroke \\
+    \textbackslash Fbaselength & 20pt & the length of the basic strokes \\
     \textbackslash Flinewidth & 0.5pt & the line width \\
     \textbackslash Fspace & 2pt & seperation between lines and text/formula \\
     \textbackslash Fassertwidth & 3\textbackslash Flinewidth & width of assert 
@@ -240,29 +293,29 @@
   \begin{align*}
     \Fbox%
     {%
-      \Fconditional[\Fanquant{F}]%
+      \Fconditional[{\Facontent[.2]\Fnquant{F}\Fcontent[.2]}]%
       {%
         \Fcontent%
         \Fconditional%
         {%
-          \Fcontent%
-          \Fcontent%
-          \Fcontent%
+          \Fcontent[3]%
           \Fbox%
           {%
             f\Fbracket%
             {%
               \Fconditional[\Faquant{a}]%
                 {\Fcontent C\mathfrak{(a)}}%
-                {\Fcontent\mathfrak{F(a)}}%
+                {\Fcontent \mathfrak{F(a)}}%
             }%
           }%
         }%
-        {\Fnquantn{b}\Fcontent\Fcontent\mathfrak{F(b)}}%
+        {\Fcontent\Fnquantn{b}\Fcontent\mathfrak{F(b)}}%
       }%
       {%
-        \Fquant{c}%
-        \Fquant{d}%
+        \Fcontent[0.4]%
+        \Fquant[0.6]{c}%
+        \Fquant[0.6]{d}%
+        \Fcontent[0.4]%
         \Fconditional%
         {%
           \Fncontent%
@@ -277,5 +330,7 @@
   \end{align*}
   And that is all. \\ 
   For comments, suggestions, identified errors, email me at \\
-  \textless Q.Pamp.2009@my.bristol.ac.uk\textgreater.
+  \textless Q.Pamp.2009 at my.bristol.ac.uk\textgreater.
+  % don't like storing my full email in a text file on the interneti,
+  % so I replaced the @ with " at ";
 \end{document}
