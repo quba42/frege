@@ -8,7 +8,7 @@ Changes with respect to begriff.sty
 
 correct relative lengths of the content stroke with respect to other strokes attached 
 to it;
-content strokes point at the middle of the followint symbols, rather than the bottom;
+content strokes point at the middle of the following symbols, rather than the bottom;
 greater width for the assertion stroke as compared to the content stroke;
 a more intuitive structure for the conditional (arguments are now given in the same 
 order as they appear on the left of a completed formula);
