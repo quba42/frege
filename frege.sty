@@ -1,0 +1,993 @@
+% frege.sty - a LaTeX2e package for typesetting begriffsschrift
+% by Quirin Pamp <Quirin.Pamp.2009@my.bristol.ac.uk>
+%
+% based on begriffHeck.sty released under GNU General Public License
+% Copyright (C) 2003 by Josh Parsons <josh@coombs.anu.edu.au>
+% with changes made in October 2004 by Richard Heck <heck@fas.harvard.edu>
+% and minor changes by Josh Parsons to fix problem with linespacing (May 2005)
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+% 
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+% General Public License for more details.
+% 
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111,
+% USA. (or just search for it online... Seriously.)
+
+%%% changes as compared to begriff.sty:
+% correct relative lengths of various content strokes;
+% content strokes at middle of line rather than bottom;
+% greater width for assertion stroke as compared to content stroke;
+% more intuitive structure of commands (arguments are now given in the same 
+% order as they appear on the left of a completed formula);
+% the command conditional with empty arguments now only gives the conditional 
+% stroke the other strokes are added as the arguments;
+% accounting for linewidth so that things remain properly centered even for 
+% a greater linewidth;
+
+%%% chenges I may put into future versions:
+% incorporation of other frege related material such as fge.sty so as to put
+% all frege related material in a single package;
+% a therfore stroke for typesetting entire arguments;
+% a vertical shorthand stroke for typesetting entire arguments;
+
+%%% identification:
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{frege}[2012/07/12 v1.0]
+\typeout{Fregean Begriffsschrift: 2012/07/12 v1.0}
+
+%%% options:
+% This package currently has no options.
+
+%%% package dependencies:
+\RequirePackage{amssymb}
+
+%%% variable decleration:
+\newlength{\temp}%
+\newlength{\tempp}%
+\newlength{\Fbaselength}%
+\setlength{\Fbaselength}{10pt}%
+\newlength{\Flinewidth}%
+\setlength{\Flinewidth}{0.5pt}%
+\newlength{\Fspace}%
+\setlength{\Fspace}{2pt}%
+\newlength{\Fassertwidth}%
+\setlength{\Fassertwidth}{3\Flinewidth}%
+\newlength{\Fraiseheight}%
+\setlength{\Fraiseheight}{1ex}%
+\addtolength{\Fraiseheight}{-\Flinewidth}%
+\newlength{\Fnegsep}%
+\setlength{\Fnegsep}{3\Flinewidth}%
+\newlength{\Fnegshort}%
+\setlength{\Fnegshort}{2\Flinewidth}%
+\newlength{\Fquantwidth}%
+\setlength{\Fquantwidth}{6pt}%
+\newlength{\Fantecedentheight}%
+\newlength{\Fconsequentdepth}%
+\newsavebox{\Fantecedent}%
+\newsavebox{\Fconsequent}%
+\newlength{\Fantecedentwidth}%
+\newlength{\Fconsequentwidth}%
+
+%%% main body/new commands:
+% content stroke:
+\newcommand{\Fcontent}%
+{%
+  \unskip%
+  \rule[\Fraiseheight]{2\Fbaselength}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated content stroke:
+\newcommand{\Fncontent}%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated content stroke:
+\newcommand{\Fnncontent}%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% asserted content stroke:
+\newcommand{\Facontent}%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{2\Fbaselength}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated asserted content stroke:
+\newcommand{\Fancontent}%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated asserted content stroke:
+\newcommand{\Fanncontent}%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% universal quantifier:
+\newcommand{\Fquant}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated universal quantifier
+\newcommand{\Fnquant}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated universal quantifier
+\newcommand{\Fnnquant}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% universal quantifier with negated content:
+\newcommand{\Fquantn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}
+
+% universal quantifier with twice negated content:
+\newcommand{\Fquantnn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated universal quantifier with negated content
+\newcommand{\Fnquantn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated universal quantifier with twice negated content
+\newcommand{\Fnquantnn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated universal quantifier with negated content
+\newcommand{\Fnnquantn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+
+% twice negated universal quantifier with twice negated content
+\newcommand{\Fnnquantnn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% asserted universal quantifier:
+\newcommand{\Faquant}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated asserted universal quantifier
+\newcommand{\Fanquant}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated asserted universal quantifier
+\newcommand{\Fannquant}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% asserted universal quantifier with negated content:
+\newcommand{\Faquantn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}
+
+% asserted universal quantifier with twice negated content:
+\newcommand{\Faquantnn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated asserted universal quantifier with negated content:
+\newcommand{\Fanquantn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% negated asserted universal quantifier with twice negated content:
+\newcommand{\Fanquantnn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated asserted universal quantifier with negated content:
+\newcommand{\Fannquantn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-0.5\Flinewidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% twice negated asserted universal quantifier with twice negated content:
+\newcommand{\Fannquantnn}[1]%
+{%
+  \unskip%
+  \setlength{\temp}{2\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \rule{\Fassertwidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \addtolength{\temp}{-\Fassertwidth}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{0.5\Fbaselength}%
+  \addtolength{\temp}{-0.25\Fquantwidth}%
+  \addtolength{\temp}{-\Flinewidth}%
+  \addtolength{\temp}{-0.5\Fnegsep}%
+  \rule[\Fraiseheight]{\temp}{\Flinewidth}%
+  \setlength{\unitlength}{\Fquantwidth}%
+  \raisebox{\Fraiseheight}{%
+  \begin{picture}(1,0)(0,0)%
+    \linethickness{\Flinewidth}%
+    \qbezier(0,0)(0.5,-0.6666)(1,0)%
+  \end{picture}}%
+  \kern-\Fquantwidth%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \raisebox{\temp}{\makebox[\Fquantwidth]{\ensuremath{\scriptstyle\mathfrak{#1}}}}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \rule[\Fraiseheight]{\Fnegsep}{\Flinewidth}%
+  \setlength{\temp}{\Fraiseheight}%
+  \addtolength{\temp}{\Flinewidth}%
+  \addtolength{\temp}{-\Fnegshort}%
+  \rule[\Fnegshort]{\Flinewidth}{\temp}%
+  \setlength{\temp}{\Fbaselength}%
+  \addtolength{\temp}{-0.5\Fquantwidth}%
+  \addtolength{\temp}{-2\Flinewidth}%
+  \addtolength{\temp}{-\Fnegsep}%
+  \rule[\Fraiseheight]{0.5\temp}{\Flinewidth}%
+  \hskip\Fspace%
+}%
+
+% conditional stroke \Fconditional[content]{consequent}{antecedent}:
+\newcommand{\Fconditional}[3][]%
+{%
+  \unskip%
+  \sbox{\Fconsequent}{%
+    \rule[-0.3\baselineskip]{0pt}{0.3\baselineskip}% this is a strut
+    \ensuremath{#2}}%
+  \settodepth{\Fconsequentdepth}{%
+    \rule[-0.3\baselineskip]{0pt}{0.3\baselineskip}% this is a strut
+    \ensuremath{#2}}%
+  \sbox{\Fantecedent}{%
+    \rule{0pt}{\baselineskip}% this is a strut
+    \rule[-0.3\baselineskip]{0pt}{0.3\baselineskip}% this is a strut
+    \ensuremath{#3}}%
+  \settoheight{\Fantecedentheight}{%
+    \rule{0pt}{\baselineskip}%
+    \rule[-0.3\baselineskip]{0pt}{0.3\baselineskip}% this is a strut
+    \ensuremath{#3}}%  
+  \setlength{\temp}{\lineskip}%
+  \addtolength{\temp}{\Fantecedentheight}%
+  \addtolength{\temp}{\Fconsequentdepth}%
+  \setlength{\tempp}{\temp}%
+  \addtolength{\tempp}{-\Fraiseheight}%
+  \mbox{%
+    \ensuremath{#1\unskip}%
+    \kern-\Flinewidth%
+    \rule[-\tempp]{\Flinewidth}{\temp}%
+% the following is very unelegant, but it works...
+    \settowidth{\Fconsequentwidth}{\usebox{\Fconsequent}}% find width
+    \settowidth{\Fantecedentwidth}{\usebox{\Fantecedent}}% find width
+    \settoheight{\temp}{\mbox{% compare and find longer of two widths
+      \rule{0pt}{\Fconsequentwidth}%
+      \rule{0pt}{\Fantecedentwidth}}}%
+    \parbox[t]{\temp}{\usebox{\Fconsequent}\\\usebox{\Fantecedent}}}%
+}%
+
+% brackets for complete expressions:
+\newcommand{\Fbracket}[1]{%
+  \settowidth{\temp}{\ensuremath{#1}}%
+  \settoheight{\tempp}{\ensuremath{#1}}%
+  \addtolength{\tempp}{3pt}% visual approximation may not scale right
+  \left(\parbox{\temp}{\rule{0pt}{\tempp}\ensuremath{#1}}\right)%
+}%
+
+% boxing expressions with a centered baseline: 
+% (\Fbracket without the brackets)
+\newcommand{\Fbox}[1]{%
+  \settowidth{\temp}{\ensuremath{#1}}%
+  \settoheight{\tempp}{\ensuremath{#1}}%
+  \addtolength{\tempp}{3pt}% visual approximation may not scale right
+  \parbox{\temp}{\rule{0pt}{\tempp}\ensuremath{#1}}%
+}%
